@@ -1,0 +1,149 @@
+
+
+CREATE TABLE Usuario (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    correo VARCHAR(100) UNIQUE NOT NULL,
+    contraseña VARCHAR(100) NOT NULL,
+    rol VARCHAR(50) NOT NULL CHECK (rol IN ('Administrador', 'Profesor', 'Estudiante'))
+);
+
+CREATE TABLE Categoria (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Materia (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    categoria_id INT NOT NULL,
+    FOREIGN KEY (categoria_id) REFERENCES Categoria(id) ON DELETE CASCADE
+);
+
+CREATE TABLE Contenido (
+    id SERIAL PRIMARY KEY,
+    titulo VARCHAR(200) NOT NULL,
+    descripcion TEXT,
+    archivo VARCHAR(255),
+    estado VARCHAR(50),
+    materia_id INT NOT NULL,
+    tipo VARCHAR(50) NOT NULL CHECK (tipo IN ('Apunte', 'Guía', 'Examen', 'Otro')),
+    FOREIGN KEY (materia_id) REFERENCES Materia(id) ON DELETE CASCADE
+);
+
+CREATE TABLE Foro (
+    id SERIAL PRIMARY KEY,
+    tema VARCHAR(200) NOT NULL,
+    materia_id INT NOT NULL,
+    FOREIGN KEY (materia_id) REFERENCES Materia(id) ON DELETE CASCADE
+);
+
+CREATE TABLE MensajeForo (
+    id SERIAL PRIMARY KEY,
+    foro_id INT NOT NULL,
+    usuario_id INT NOT NULL,
+    contenido TEXT NOT NULL,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (foro_id) REFERENCES Foro(id) ON DELETE CASCADE,
+    FOREIGN KEY (usuario_id) REFERENCES Usuario(id) ON DELETE CASCADE
+);
+
+CREATE TABLE Reporte (
+    id SERIAL PRIMARY KEY,
+    motivo TEXT NOT NULL,
+    estado VARCHAR(50) NOT NULL,
+    usuario_id INT NOT NULL,
+    contenido_id INT,
+    FOREIGN KEY (usuario_id) REFERENCES Usuario(id) ON DELETE CASCADE,
+    FOREIGN KEY (contenido_id) REFERENCES Contenido(id) ON DELETE SET NULL
+);
+
+CREATE TABLE Evaluacion (
+    id SERIAL PRIMARY KEY,
+    titulo VARCHAR(200) NOT NULL,
+    descripcion TEXT,
+    fecha_limite TIMESTAMP,
+    puntaje_maximo INT,
+    materia_id INT NOT NULL,
+    FOREIGN KEY (materia_id) REFERENCES Materia(id) ON DELETE CASCADE
+);
+
+CREATE TABLE Evaluacion_Usuario (
+    id SERIAL PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    evaluacion_id INT NOT NULL,
+    calificacion INT,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_id) REFERENCES Usuario(id) ON DELETE CASCADE,
+    FOREIGN KEY (evaluacion_id) REFERENCES Evaluacion(id) ON DELETE CASCADE
+);
+
+CREATE TABLE Usuario_Materia (
+    usuario_id INT NOT NULL,
+    materia_id INT NOT NULL,
+    PRIMARY KEY (usuario_id, materia_id),
+    FOREIGN KEY (usuario_id) REFERENCES Usuario(id) ON DELETE CASCADE,
+    FOREIGN KEY (materia_id) REFERENCES Materia(id) ON DELETE CASCADE
+);
+
+
+Contexto del sistema
+El dominio corresponde a una plataforma educativa (LMS) con tres actores principales (Administrador,
+Profesor, Estudiante) y módulos: Materias, Contenidos (con estados), Foros, Reportes, Evaluaciones y
+Categorías. Se requieren: creación y autenticación de usuarios con distintos permisos; gestión
+unificada por parte del Administrador; notificaciones a participantes ante eventos del curso (nuevo
+contenido, actualizaciones, mensajes en foros, cambios de estado de reportes)
+
+El objetivo es reducir acoplamiento, controlar la complejidad y facilitar la extensión del sistema: Factory
+Method (creación de usuarios por rol), Facade (orquestación administrativa) y Observer
+(notificaciones en Materia/Contenido/Foro)
+
+//PATRONES DE DISEÑO
+Patron credencial: Factory Method (usuarios por rol)Evitar condicionales repetidos (if/switch) para
+instanciar subtipos de Usuario (Administrador, Profesor, Estudiante) al registrar o iniciar sesión. Se
+busca poder agregar nuevos roles sin modificar múltiples puntos del código.
+Decisión de diseño:
+Exponer un método de fábrica por rol. Una capa de aplicación consulta el rol y delega en la fábrica
+correspondiente. Alternativa si se requieren familias completas (usuario + servicios/menus
+específicos): Abstract Factory.
+Ubicación en el diagrama: Clases afectadas: Usuario (abstracta), Administrador, Profesor, Estudiante
+
+Explciacion ejecutada: Se implementó el patrón Factory Method para la creación de usuarios según su rol 
+(Administrador, Profesor, Estudiante) en la plataforma LMS. Primero, se definió una clase abstracta Usuario que sirve como base
+ para los distintos tipos de usuario. Luego, se crearon subclases concretas (Administrador, Profesor, Estudiante) que heredan de Usuario.
+Para evitar condicionales y facilitar la extensión, se creó una interfaz UsuarioFactory con el método crearUsuario. Cada tipo de usuario 
+tiene su propia fábrica concreta (AdministradorFactory, ProfesorFactory, EstudianteFactory) que implementa la interfaz y retorna la instancia correspondiente.
+Así, cuando se necesita crear un usuario, el sistema consulta el rol y delega la creación en la fábrica adecuada, 
+permitiendo agregar nuevos roles en el futuro sin modificar el código existente. Esto reduce el acoplamiento y mejora la mantenibilidad del sistema.
+
+
+
+
+
+Patrón estructural: Facade (Orquestación administrativa)
+Las operaciones de alto nivel del Administrador (gestionar usuarios, materias, contenidos, reportes)
+implican coordinar varios servicios/entidades. Sin una fachada, la UI/controladores deben conocer
+demasiados detalles internos.
+Decisión de diseño:
+Crear una clase 'AdminFacade' que exponga métodos simples y delegue en servicios internos
+especializados (UsuarioService, MateriaService, ContenidoService, ReporteService).
+
+explicacion ejecutada: Se implementó el patrón estructural Facade mediante la clase AdminFacade en el paquete de servicios. El objetivo fue simplificar 
+y centralizar las operaciones administrativas del sistema, como la gestión de usuarios, materias, contenidos y reportes. Sin la fachada, 
+los controladores o la interfaz de usuario tendrían que interactuar directamente con múltiples servicios y conocer detalles internos de cada uno, 
+lo que aumenta el acoplamiento y la complejidad.
+La clase AdminFacade expone métodos simples y de alto nivel (por ejemplo, crear o listar usuarios, materias, contenidos y reportes) y delega la lógica 
+específica en servicios internos especializados (UsuarioService, MateriaService, ContenidoService, ReporteService). Así, la fachada actúa como un punto 
+único de acceso para las operaciones administrativas, ocultando la complejidad y facilitando la mantenibilidad y extensión del sistema.
+
+
+
+
+Patrón de comportamiento Observer (Suscriptores y notificaciones)
+Se debe notificar a actores interesados cuando ocurren eventos: nuevo Contenido, cambio de estado,
+mensaje en Foro, creación/resolución de Reporte. Se busca desacoplar emisores de receptores.
+Decisión de diseño:
+Materias, Foros y ciertos Contenidos actúan como Sujetos; Estudiantes/Profesores/Administradores
+como Observadores. Cada evento dispara notificaciones por distintos canales (UI, email, push).
+Ubicación en el diagrama:
+Clases afectadas: Materia, Contenido, Foro, Estudiante, Profesor, Administrador.

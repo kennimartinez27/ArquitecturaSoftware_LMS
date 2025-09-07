@@ -10,6 +10,7 @@ import java.util.Set;
 @Entity
 @Table(name = "Usuario")
 public abstract class Usuario {
+    public Usuario() {}
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

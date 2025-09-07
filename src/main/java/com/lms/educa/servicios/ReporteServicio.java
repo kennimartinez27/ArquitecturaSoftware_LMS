@@ -1,11 +1,11 @@
-package com.lms.educa.service;
+package com.lms.educa.servicios;
 
 import com.lms.educa.Entidades.Reporte;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ReporteService {
+public class ReporteServicio {
     public Reporte crearReporte(Reporte reporte) {
         // Lógica para crear reporte
         return reporte;

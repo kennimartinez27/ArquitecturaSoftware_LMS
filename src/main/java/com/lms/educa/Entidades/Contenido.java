@@ -1,12 +1,15 @@
 package com.lms.educa.Entidades;
+import lombok.EqualsAndHashCode;
+import com.lms.educa.interfaces.Subject;
 
 import jakarta.persistence.*;
 import lombok.Data;
 
+@EqualsAndHashCode(callSuper = false)
 @Data
 @Entity
 @Table(name = "Contenido")
-public class Contenido {
+public class Contenido extends Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

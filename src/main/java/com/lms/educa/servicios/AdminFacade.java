@@ -1,4 +1,4 @@
-package com.lms.educa.service;
+package com.lms.educa.servicios;
 
 import org.springframework.stereotype.Service;
 import com.lms.educa.Entidades.*;
@@ -6,15 +6,15 @@ import java.util.List;
 
 @Service
 public class AdminFacade {
-    private final UsuarioService usuarioService;
-    private final MateriaService materiaService;
-    private final ContenidoService contenidoService;
-    private final ReporteService reporteService;
+    private final UsuarioServicio usuarioService;
+    private final MateriaServicio materiaService;
+    private final ContenidoServicio contenidoService;
+    private final ReporteServicio reporteService;
 
-    public AdminFacade(UsuarioService usuarioService,
-                      MateriaService materiaService,
-                      ContenidoService contenidoService,
-                      ReporteService reporteService) {
+    public AdminFacade(UsuarioServicio usuarioService,
+                      MateriaServicio materiaService,
+                      ContenidoServicio contenidoService,
+                      ReporteServicio reporteService) {
         this.usuarioService = usuarioService;
         this.materiaService = materiaService;
         this.contenidoService = contenidoService;

@@ -1,11 +1,11 @@
-package com.lms.educa.service;
+package com.lms.educa.servicios;
 
 import com.lms.educa.Entidades.Materia;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MateriaService {
+public class MateriaServicio {
     public Materia crearMateria(Materia materia) {
         // Lógica para crear materia
         return materia;

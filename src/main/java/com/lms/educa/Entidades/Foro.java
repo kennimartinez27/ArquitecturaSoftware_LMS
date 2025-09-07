@@ -3,9 +3,11 @@ package com.lms.educa.Entidades;
 import jakarta.persistence.*;
 import java.util.Set;
 
+import com.lms.educa.interfaces.Subject;
+
 @Entity
 @Table(name = "Foro")
-public class Foro {
+public class Foro extends Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -17,5 +17,6 @@ public class Categoria {
     private String nombre;
 
     @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private Set<Materia> materias;
 }

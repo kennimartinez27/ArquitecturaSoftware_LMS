@@ -8,6 +8,7 @@ import java.util.Set;
 
 @Data
 @Entity
+@Inheritance(strategy = jakarta.persistence.InheritanceType.JOINED)
 @Table(name = "Usuario")
 public abstract class Usuario {
     public Usuario() {}

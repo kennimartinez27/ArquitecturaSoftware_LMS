@@ -25,12 +25,15 @@ public class Materia extends Subject {
     private Categoria categoria;
 
     @OneToMany(mappedBy = "materia", cascade = CascadeType.ALL)
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private Set<Contenido> contenidos;
 
     @OneToMany(mappedBy = "materia", cascade = CascadeType.ALL)
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private Set<Foro> foros;
 
     @OneToMany(mappedBy = "materia", cascade = CascadeType.ALL)
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private Set<Evaluacion> evaluaciones;
 
     @ManyToMany
@@ -39,6 +42,7 @@ public class Materia extends Subject {
         joinColumns = @JoinColumn(name = "materia_id"),
         inverseJoinColumns = @JoinColumn(name = "usuario_id")
     )
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private Set<Usuario> usuarios;
 
     // Getters y setters

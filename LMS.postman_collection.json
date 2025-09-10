@@ -1,0 +1,236 @@
+{
+	"info": {
+		"_postman_id": "91d3d006-03d0-4dc8-9a84-b4140a2dfc3a",
+		"name": "LMS",
+		"description": "ejemplos para probar los endpoints en Postman:\n\n### Categoría\n\n**Crear categoría**  \nPOST `http://localhost:8080/categorias/crear`  \nBody (JSON):\n\n``` json\n{\n  \"nombre\": \"Ciencias\"\n}\n\n ```\n\n**Listar categorías**  \nGET `http://localhost:8080/categorias/listar`\n\n**Obtener categoría por ID**  \nGET `http://localhost:8080/categorias/1`\n\n**Actualizar categoría**  \nPUT `http://localhost:8080/categorias/actualizar`  \nBody (JSON):\n\n``` json\n{\n  \"id\": 1,\n  \"nombre\": \"Ciencias Naturales\"\n}\n\n ```\n\n**Eliminar categoría**  \nDELETE `http://localhost:8080/categorias/eliminar/1`\n\n---\n\n### Materia\n\n**Crear materia**  \nPOST `http://localhost:8080/materias/crear`  \nBody (JSON):\n\n``` json\n{\n  \"nombre\": \"Matemáticas\",\n  \"categoria\": {\n    \"id\": 1\n  }\n}\n\n ```\n\n**Listar materias**  \nGET `http://localhost:8080/materias/listar`\n\n**Obtener materia por ID**  \nGET `http://localhost:8080/materias/1`\n\n**Actualizar materia**  \nPUT `http://localhost:8080/materias/actualizar`  \nBody (JSON):\n\n``` json\n{\n  \"id\": 1,\n  \"nombre\": \"Matemáticas Avanzadas\",\n  \"categoria\": {\n    \"id\": 1\n  }\n}\n\n ```\n\n**Eliminar materia**  \nDELETE `http://localhost:8080/materias/eliminar/1`",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33759642"
+	},
+	"item": [
+		{
+			"name": "listar usuarios",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseurl}}/usuarios/listar",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"usuarios",
+						"listar"
+					]
+				},
+				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+			},
+			"response": []
+		},
+		{
+			"name": "crear usuarios",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"tipo\": \"estudiante\",\r\n  \"nombre\": \"lina\",\r\n  \"correo\": \"lina@email.com\",\r\n  \"contrasena\": \"7894\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseurl}}/usuarios/crear",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"usuarios",
+						"crear"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "crear categoria",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"nombre\": \"Programacion\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseurl}}/categorias/crear",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"categorias",
+						"crear"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "listar categorias",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{baseurl}}/categorias/listar",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"categorias",
+						"listar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "crear materia",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"nombre\": \"P.O.O\",\r\n  \"categoria\": {\r\n    \"id\": 2\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseurl}}/materias/crear",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"materias",
+						"crear"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "listar materias",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{baseurl}}/materias/listar",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"materias",
+						"listar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Eliminar materia",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseurl}}/materias/eliminar/5",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"materias",
+						"eliminar",
+						"5"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "id",
+			"value": "1"
+		},
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080"
+		}
+	]
+}

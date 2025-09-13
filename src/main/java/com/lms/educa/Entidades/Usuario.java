@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 
-import java.util.Set;
-
 @Data
 @Entity
 @Inheritance(strategy = jakarta.persistence.InheritanceType.JOINED)
@@ -28,18 +26,7 @@ public abstract class Usuario {
     @Column(nullable = false, length = 50)
     private String rol;
 
-    // Relaciones
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-    private Set<MensajeForo> mensajesForo;
-
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-    private Set<Reporte> reportes;
-
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-    private Set<EvaluacionUsuario> evaluacionesUsuario;
-
-    @ManyToMany(mappedBy = "usuarios")
-    private Set<Materia> materias;
+ 
 
     public Usuario(Long id, String nombre, String correo, String contrasena, String rol) {
         this.id = id;

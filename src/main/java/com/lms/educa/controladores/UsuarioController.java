@@ -1,21 +1,27 @@
 package com.lms.educa.controladores;
 
+
 import com.lms.educa.Entidades.Usuario;
-import com.lms.educa.Factory.AdministradorFactory;
-import com.lms.educa.Factory.EstudianteFactory;
-import com.lms.educa.Factory.ProfesorFactory;
-import com.lms.educa.Factory.UsuarioFactory;
-import com.lms.educa.servicios.UsuarioService;
+import com.lms.educa.servicios.AdminFacade;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
+/**
+ * Controlador para la gestión de usuarios.
+ * Aplica el patrón Factory Method para instanciar subtipos de Usuario según el rol.
+ */
+@Tag(name = "Usuarios", description = "Operaciones relacionadas con usuarios y roles (Factory Method)")
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController {
-    private final UsuarioService usuarioService;
+    private final AdminFacade adminFacade;
 
-    public UsuarioController(UsuarioService usuarioService) {
-        this.usuarioService = usuarioService;
+    public UsuarioController(AdminFacade adminFacade) {
+        this.adminFacade = adminFacade;
     }
 
     public static class UsuarioDTO {
@@ -25,29 +31,31 @@ public class UsuarioController {
         public String contrasena;
     }
 
+
+    /**
+     * Crea un usuario según el tipo especificado usando el patrón Factory Method.
+     * @param usuarioDTO Datos del usuario y tipo de rol
+     * @return Usuario creado
+     */
+    @Operation(summary = "Crear usuario", description = "Crea un usuario según el rol usando Factory Method")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Usuario creado exitosamente"),
+        @ApiResponse(responseCode = "500", description = "Tipo de usuario no válido")
+    })
     @PostMapping("/crear")
     public Usuario crearUsuario(@RequestBody UsuarioDTO usuarioDTO) {
         String tipoNormalizado = usuarioDTO.tipo.trim().toLowerCase();
         System.out.println("Tipo recibido: '" + usuarioDTO.tipo + "' (normalizado: '" + tipoNormalizado + "')");
-        UsuarioFactory factory;
-        switch (tipoNormalizado) {
-            case "administrador":
-                factory = new AdministradorFactory();
-                break;
-            case "profesor":
-                factory = new ProfesorFactory();
-                break;
-            case "estudiante":
-                factory = new EstudianteFactory();
-                break;
-            default:
-                throw new IllegalArgumentException("Tipo de usuario no válido: " + usuarioDTO.tipo);
-        }
-        return usuarioService.crearUsuario(factory, usuarioDTO.nombre, usuarioDTO.correo, usuarioDTO.contrasena);
+        return adminFacade.crearUsuario(tipoNormalizado, usuarioDTO.nombre, usuarioDTO.correo, usuarioDTO.contrasena);
     }
 
+
+    /**
+     * Lista todos los usuarios registrados.
+     */
+    @Operation(summary = "Listar usuarios", description = "Devuelve la lista de usuarios")
     @GetMapping("/listar")
     public List<Usuario> listarUsuarios() {
-        return usuarioService.listarUsuarios();
+        return adminFacade.listarUsuarios();
     }
 }

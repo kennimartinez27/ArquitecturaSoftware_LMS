@@ -8,7 +8,6 @@ import java.util.Set;
 
 import com.lms.educa.interfaces.Subject;
 
-@EqualsAndHashCode(callSuper = false)
 @Data
 @Entity
 @Table(name = "Materia")
@@ -22,6 +21,7 @@ public class Materia extends Subject {
 
     @ManyToOne
     @JoinColumn(name = "categoria_id", nullable = false)
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private Categoria categoria;
 
     @OneToMany(mappedBy = "materia", cascade = CascadeType.ALL)
@@ -42,8 +42,20 @@ public class Materia extends Subject {
         joinColumns = @JoinColumn(name = "materia_id"),
         inverseJoinColumns = @JoinColumn(name = "usuario_id")
     )
-    @com.fasterxml.jackson.annotation.JsonIgnore
+    @com.fasterxml.jackson.annotation.JsonBackReference
     private Set<Usuario> usuarios;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Materia materia = (Materia) o;
+        return id != null && id.equals(materia.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
 
     // Getters y setters
     // ...

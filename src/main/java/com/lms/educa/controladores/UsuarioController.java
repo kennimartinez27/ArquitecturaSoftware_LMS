@@ -1,3 +1,5 @@
+ 
+
 package com.lms.educa.controladores;
 
 
@@ -58,4 +60,46 @@ public class UsuarioController {
     public List<Usuario> listarUsuarios() {
         return adminFacade.listarUsuarios();
     }
+
+    /**
+     * Asocia una materia a un estudiante.
+     */
+    @Operation(summary = "Asociar materia a estudiante", description = "Asocia una materia a un estudiante por sus IDs")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Asociación exitosa"),
+        @ApiResponse(responseCode = "400", description = "Datos inválidos o no encontrado")
+    })
+    @PostMapping("/asociar-materia")
+    public String asociarMateriaAEstudiante(
+        @RequestParam("estudianteId") Long estudianteId,
+        @RequestParam("materiaId") Long materiaId) {
+        boolean exito = adminFacade.asociarMateriaAEstudiante(estudianteId, materiaId);
+        return exito ? "Asociación exitosa" : "No se pudo asociar la materia al estudiante";
+    }
+    /**
+     * Lista solo los estudiantes registrados, mostrando sus materias asociadas.
+     */
+    @Operation(summary = "Listar estudiantes", description = "Devuelve la lista de estudiantes con sus materias asociadas")
+    @GetMapping("/estudiantes")
+    public List<com.lms.educa.Entidades.Estudiante> listarEstudiantes() {
+        return adminFacade.listarUsuarios().stream()
+            .filter(u -> u instanceof com.lms.educa.Entidades.Estudiante)
+            .map(u -> (com.lms.educa.Entidades.Estudiante) u)
+            .toList();
+    }
+   
+
+        /**
+     * Obtiene un estudiante por su id, mostrando sus materias asociadas y tipo real.
+     */
+    @Operation(summary = "Obtener estudiante por id", description = "Devuelve un estudiante con sus materias asociadas")
+    @GetMapping("/estudiantes/{id}")
+    public com.lms.educa.Entidades.Estudiante obtenerEstudiantePorId(@PathVariable("id") Long id) {
+        return adminFacade.listarUsuarios().stream()
+            .filter(u -> u instanceof com.lms.educa.Entidades.Estudiante && u.getId().equals(id))
+            .map(u -> (com.lms.educa.Entidades.Estudiante) u)
+            .findFirst()
+            .orElse(null);
+    }
+
 }

@@ -23,7 +23,7 @@ Este repositorio contiene el backend del sistema LMS desarrollado en Java con Sp
 ./gradlew bootRun
 
 
-1. Fábricas (Factory Method): - Hay una interfaz UsuarioFactory y fábricas concretas para cada rol (AdministradorFactory, ProfesorFactory, EstudianteFactory). - Cada fábrica implementa el método crearUsuario, devolviendo la instancia correspondiente. - Esto cumple con el patrón Factory Method y permite agregar nuevos roles sin modificar el resto del sistema. ¡Bien hecho!
+1. Fábricas (Factory Method): - Hay una interfaz UsuarioFactory y fábricas concretas para cada rol (AdministradorFactory, ProfesorFactory, EstudianteFactory). - Cada fábrica implementa el método crearUsuario, devolviendo la instancia correspondiente. - Esto cumple con el patrón Factory Method y permite agregar nuevos roles sin modificar el resto del sistema.
 
 2. Fachada administrativa (Facade): - La clase AdminFacade expone métodos simples para crear y listar usuarios, materias, contenidos y reportes. - Internamente delega en los servicios especializados, desacoplando la lógica de orquestación de los controladores. - La implementación es correcta y sigue el patrón Facade.
 

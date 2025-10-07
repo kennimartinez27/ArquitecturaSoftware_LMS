@@ -17,8 +17,17 @@ public class Estudiante extends Usuario implements Observer {
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private Set<EvaluacionUsuario> evaluacionesUsuario;
 
-    @ManyToMany(mappedBy = "usuarios")
+    @ManyToMany(mappedBy = "usuarios", fetch = FetchType.EAGER)
+    @com.fasterxml.jackson.annotation.JsonManagedReference
     private Set<Materia> materias;
+
+    public Set<Materia> getMaterias() {
+        return materias;
+    }
+
+    public void setMaterias(Set<Materia> materias) {
+        this.materias = materias;
+    }
     @Override
     public void update(String evento, Object data) {
         // Aquí puedes implementar la lógica de notificación (UI, email, push)

@@ -60,4 +60,11 @@ public class AdminFacade {
     public List<Materia> listarMaterias() {
         return materiaService.listarMaterias();
     }
+
+    /**
+     * Asocia una materia a un estudiante.
+     */
+    public boolean asociarMateriaAEstudiante(Long estudianteId, Long materiaId) {
+        return usuarioService.asociarMateriaAEstudiante(estudianteId, materiaId);
+    }
 }

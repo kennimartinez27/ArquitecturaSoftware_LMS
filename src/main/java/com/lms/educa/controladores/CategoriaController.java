@@ -15,7 +15,7 @@ import io.swagger.v3.oas.annotations.Operation;
  */
 @Tag(name = "Categorías", description = "Operaciones sobre categorías (Facade)")
 @RestController
-@RequestMapping("/categorias")
+@RequestMapping("/api/categorias")
 public class CategoriaController {
     @Autowired
     private CategoriaService categoriaService;

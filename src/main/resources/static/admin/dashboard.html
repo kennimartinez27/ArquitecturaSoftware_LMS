@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - LMS</title>
+</head>
+<body>
+    <nav>
+        <h1>Panel de Administración</h1>
+        <button onclick="logout()">Cerrar Sesión</button>
+    </nav>
+
+    <div class="admin-panel">
+        <!-- Gestión de Usuarios -->
+        <section id="usuarios-section">
+            <h2>Gestión de Usuarios</h2>
+            <button onclick="mostrarFormularioUsuario()">Nuevo Usuario</button>
+            <div id="formulario-usuario" style="display: none;">
+                <h3>Crear Usuario</h3>
+                <form id="userForm">
+                    <select id="userType" required>
+                        <option value="">Seleccione tipo de usuario</option>
+                        <option value="administrador">Administrador</option>
+                        <option value="profesor">Profesor</option>
+                        <option value="estudiante">Estudiante</option>
+                    </select>
+                    <input type="text" id="nombre" placeholder="Nombre" required>
+                    <input type="email" id="correo" placeholder="Correo electrónico" required>
+                    <input type="password" id="contrasena" placeholder="Contraseña" required>
+                    <button type="submit">Crear Usuario</button>
+                </form>
+            </div>
+            <div id="lista-usuarios">
+                <h3>Lista de Usuarios</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Correo</th>
+                            <th>Rol</th>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usuarios-tabla">
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Gestión de Materias -->
+        <section id="materias-section">
+            <h2>Gestión de Materias</h2>
+            <button onclick="mostrarFormularioMateria()">Nueva Materia</button>
+            <div id="formulario-materia" style="display: none;">
+                <h3>Crear Materia</h3>
+                <form id="materiaForm">
+                    <input type="text" id="nombreMateria" placeholder="Nombre de la materia" required>
+                    <select id="categoriaMateria" required>
+                        <option value="">Seleccione categoría</option>
+                    </select>
+                    <button type="submit">Crear Materia</button>
+                </form>
+            </div>
+            <div id="lista-materias">
+                <h3>Lista de Materias</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Categoría</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="materias-tabla">
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Gestión de Categorías -->
+        <section id="categorias-section">
+            <h2>Gestión de Categorías</h2>
+            <button onclick="mostrarFormularioCategoria()">Nueva Categoría</button>
+            <div id="formulario-categoria" style="display: none;">
+                <h3>Crear Categoría</h3>
+                <form id="categoriaForm">
+                    <input type="text" id="nombreCategoria" placeholder="Nombre de la categoría" required>
+                    <button type="submit">Crear Categoría</button>
+                </form>
+            </div>
+            <div id="lista-categorias">
+                <h3>Lista de Categorías</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="categorias-tabla">
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/admin.js"></script>
+</body>
+</html>

@@ -15,7 +15,7 @@ import io.swagger.v3.oas.annotations.Operation;
  */
 @Tag(name = "Materias", description = "Operaciones sobre materias (Facade)")
 @RestController
-@RequestMapping("/materias")
+@RequestMapping("/api/materias")
 public class MateriaController {
     @Autowired
     private MateriaService materiaService;

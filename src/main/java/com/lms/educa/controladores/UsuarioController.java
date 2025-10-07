@@ -16,7 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
  */
 @Tag(name = "Usuarios", description = "Operaciones relacionadas con usuarios y roles (Factory Method)")
 @RestController
-@RequestMapping("/usuarios")
+@RequestMapping("/api/usuarios")
 public class UsuarioController {
     private final AdminFacade adminFacade;
 

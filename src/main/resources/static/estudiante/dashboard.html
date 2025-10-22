@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Estudiante - LMS</title>
+    <link rel="stylesheet" href="../css/estudiante-dashboard.css">
+</head>
+<body>
+    <nav>
+        <h1>Panel de Estudiante</h1>
+        <div>
+            <span id="nombreEstudiante"></span>
+            <button onclick="logout()">Cerrar Sesión</button>
+        </div>
+    </nav>
+
+    <div class="estudiante-panel">
+        <!-- Vista de Categorías -->
+        <section id="categorias-section">
+            <h2>Categorías de Materias</h2>
+            <div id="categorias-container" class="cards-container">
+                <!-- Las categorías se cargarán aquí -->
+            </div>
+        </section>
+
+        <!-- Vista de Materias por Categoría -->
+        <section id="materias-section" style="display: none;">
+            <div class="breadcrumb">
+                <button onclick="mostrarCategorias()">← Volver a Categorías</button>
+            </div>
+            <h2 id="categoria-titulo"></h2>
+            <div id="materias-container" class="cards-container">
+                <!-- Las materias se cargarán aquí -->
+            </div>
+        </section>
+
+        <!-- Vista de Contenidos de una Materia -->
+        <section id="contenidos-section" style="display: none;">
+            <div class="breadcrumb">
+                <button onclick="volverAMaterias()">← Volver a Materias</button>
+            </div>
+            <h2 id="materia-titulo"></h2>
+            
+            <!-- Pestañas para alternar entre Contenidos y Foros -->
+            <div class="tabs-container">
+                <button id="tab-contenidos" class="tab-button active" onclick="mostrarTab('contenidos')">
+                    📚 Contenidos
+                </button>
+                <button id="tab-foros" class="tab-button" onclick="mostrarTab('foros')">
+                    💬 Foros de Discusión
+                </button>
+            </div>
+            
+            <!-- Tab de Contenidos -->
+            <div id="tab-contenidos-content" class="tab-content">
+                <!-- Formulario para subir contenido -->
+                <div class="contenido-form-container">
+                    <button id="btn-mostrar-formulario" onclick="toggleFormularioContenido()">
+                        + Subir Nuevo Contenido
+                    </button>
+                    
+                    <form id="formulario-contenido" style="display: none;" onsubmit="subirContenido(event)">
+                        <h3>Subir Nuevo Contenido</h3>
+                        
+                        <label for="titulo-contenido">Título *</label>
+                        <input type="text" id="titulo-contenido" required>
+                        
+                        <label for="descripcion-contenido">Descripción</label>
+                        <textarea id="descripcion-contenido" rows="3"></textarea>
+                        
+                        <label for="tipo-contenido">Tipo de Contenido *</label>
+                        <select id="tipo-contenido" required>
+                            <option value="">Seleccione un tipo</option>
+                            <option value="Apunte">Apunte</option>
+                            <option value="Guía">Guía</option>
+                            <option value="Examen">Examen</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                        
+                        <label for="archivo-contenido">Archivo *</label>
+                        <input type="file" id="archivo-contenido" required>
+                        <small style="color: #6c757d;">Tamaño máximo: 50MB</small>
+                        
+                        <div class="form-buttons">
+                            <button type="submit" class="btn-submit">Subir Contenido</button>
+                            <button type="button" class="btn-cancel" onclick="cancelarSubida()">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Lista de contenidos -->
+                <div id="contenidos-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Título</th>
+                                <th>Tipo</th>
+                                <th>Descripción</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="contenidos-tabla">
+                            <!-- Los contenidos se cargarán aquí -->
+                        </tbody>
+                    </table>
+                    <div id="no-contenidos" style="display: none; text-align: center; padding: 2rem;">
+                        <p>No hay contenidos disponibles para esta materia.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab de Foros -->
+            <div id="tab-foros-content" class="tab-content" style="display: none;">
+                <!-- Botón para crear nuevo foro -->
+                <div class="foro-form-container">
+                    <button id="btn-crear-foro" onclick="toggleFormularioForo()">
+                        + Crear Nuevo Foro
+                    </button>
+                    
+                    <form id="formulario-foro" style="display: none;" onsubmit="crearForo(event)">
+                        <h3>Crear Nuevo Foro de Discusión</h3>
+                        
+                        <label for="tema-foro">Tema del Foro *</label>
+                        <input type="text" id="tema-foro" placeholder="Ej: Dudas sobre el capítulo 3" required>
+                        
+                        <div class="form-buttons">
+                            <button type="submit" class="btn-submit">Crear Foro</button>
+                            <button type="button" class="btn-cancel" onclick="cancelarForo()">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Lista de foros -->
+                <div id="foros-lista" class="foros-container">
+                    <p class="no-data" id="no-foros">No hay foros creados para esta materia.</p>
+                </div>
+                
+                <!-- Vista de mensajes de un foro específico -->
+                <div id="foro-mensajes-section" style="display: none;">
+                    <div class="foro-header">
+                        <button onclick="volverAListaForos()" class="btn-back">← Volver a Foros</button>
+                        <h3 id="foro-tema-actual"></h3>
+                    </div>
+                    
+                    <!-- Mensajes del foro -->
+                    <div id="mensajes-container" class="mensajes-container">
+                        <!-- Los mensajes se cargarán aquí -->
+                    </div>
+                    
+                    <!-- Formulario para nuevo mensaje -->
+                    <div class="nuevo-mensaje-container">
+                        <form id="formulario-mensaje" onsubmit="enviarMensaje(event)">
+                            <textarea id="contenido-mensaje" rows="3" placeholder="Escribe tu mensaje..." required></textarea>
+                            <button type="submit" class="btn-submit">Enviar Mensaje</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal para Reportar Contenido -->
+    <div id="modal-reportar" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="modal-close" onclick="cerrarModalReporte()">&times;</span>
+            <h3>⚠️ Reportar Contenido Inapropiado</h3>
+            <p>Estás a punto de reportar este contenido. Por favor, selecciona el motivo:</p>
+            
+            <form id="formulario-reporte" onsubmit="enviarReporte(event)">
+                <label for="motivo-select">Motivo del Reporte *</label>
+                <select id="motivo-select" required>
+                    <option value="">Seleccione un motivo</option>
+                    <option value="Contenido Ofensivo">Contenido Ofensivo</option>
+                    <option value="No Relacionado con la Materia">No Relacionado con la Materia</option>
+                    <option value="Spam o Publicidad">Spam o Publicidad</option>
+                    <option value="Contenido Inapropiado">Contenido Inapropiado</option>
+                    <option value="Plagio">Plagio</option>
+                    <option value="Otro">Otro</option>
+                </select>
+                
+                <label for="descripcion-reporte">Descripción Adicional (Opcional)</label>
+                <textarea id="descripcion-reporte" rows="4" placeholder="Describe brevemente por qué reportas este contenido..."></textarea>
+                
+                <input type="hidden" id="contenido-reportado-id">
+                
+                <div class="form-buttons">
+                    <button type="submit" class="btn-submit btn-reportar">Enviar Reporte</button>
+                    <button type="button" class="btn-cancel" onclick="cerrarModalReporte()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/estudiante.js"></script>
+</body>
+</html>

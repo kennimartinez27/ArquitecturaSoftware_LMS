@@ -24,7 +24,15 @@ public class MateriaService {
     }
 
     public Materia actualizarMateria(Materia materia) {
-        return materiaRepository.save(materia);
+        // Obtener la materia existente
+        Materia materiaExistente = materiaRepository.findById(materia.getId())
+            .orElseThrow(() -> new RuntimeException("Materia no encontrada"));
+        
+        // Actualizar solo los campos necesarios
+        materiaExistente.setNombre(materia.getNombre());
+        materiaExistente.setCategoria(materia.getCategoria());
+        
+        return materiaRepository.save(materiaExistente);
     }
 
     public void eliminarMateria(Long id) {

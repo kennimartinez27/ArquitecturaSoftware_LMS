@@ -1,0 +1,877 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #ffffff;
+    min-height: 100vh;
+}
+
+/* Navegación */
+nav {
+    background-color: #243447;
+    color: white;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+nav h1 {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+nav button {
+    background-color: transparent;
+    color: white;
+    border: 2px solid white;
+    padding: 8px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+nav button:hover {
+    background-color: white;
+    color: #243447;
+}
+
+/* Panel de Estudiante */
+.estudiante-panel {
+    max-width: none;
+    margin: 0;
+    padding: 40px 20px;
+    min-height: 100vh;
+}
+
+/* Secciones */
+section {
+    background: white;
+    margin-bottom: 50px;
+    border-left: 4px solid #243447;
+    padding-left: 0;
+}
+
+section.active {
+    display: block;
+}
+
+section h2 {
+    background-color: #243447;
+    color: white;
+    font-size: 20px;
+    padding: 15px 20px;
+    margin: 0 0 20px 0;
+    font-weight: 600;
+}
+
+section h3 {
+    color: #243447;
+    font-size: 17px;
+    margin: 25px 20px 15px 20px;
+    font-weight: 600;
+}
+
+/* Separador visual entre secciones */
+section:not(:last-child) {
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 30px;
+}
+
+/* Estados vacíos */
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #999;
+    font-style: italic;
+}
+
+/* Badges/Insignias */
+.badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* Panel de Estudiante - Cards */
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    min-height: 200px;
+    background-color: #ffffff;
+}
+
+.categoria-card,
+.materia-card {
+    background: white;
+    border: 2px solid #243447;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.categoria-card:hover,
+.materia-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(36, 52, 71, 0.2);
+}
+
+.categoria-card h3,
+.materia-card h3 {
+    color: #243447;
+    font-size: 18px;
+    margin: 0 0 15px 0;
+    font-weight: 600;
+}
+
+.materia-categoria {
+    color: #6c757d;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.categoria-card button,
+.materia-card button {
+    width: 100%;
+    background-color: #243447;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.categoria-card button:hover,
+.materia-card button:hover {
+    background-color: #1a2732;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+    padding: 15px 20px;
+    background-color: #f8f9fa;
+    margin: 0 20px 20px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.breadcrumb span {
+    color: #243447;
+    font-weight: 600;
+}
+
+.breadcrumb button {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.breadcrumb button:hover {
+    background-color: #5a6268;
+}
+
+/* Botones de navegación */
+.btn-nav {
+    background-color: #6c757d !important;
+    margin-bottom: 15px !important;
+}
+
+.btn-nav:hover {
+    background-color: #5a6268 !important;
+}
+
+/* Botón de descarga en tabla */
+.btn-descargar {
+    background-color: #28a745 !important;
+    color: white !important;
+}
+
+.btn-descargar:hover {
+    background-color: #218838 !important;
+}
+
+/* Mensaje cuando no hay datos */
+.no-data {
+    text-align: center;
+    padding: 40px;
+    color: #6c757d;
+    font-size: 16px;
+}
+
+/* Formulario de subida de contenido */
+.contenido-form-container {
+    margin: 0 20px 30px 20px;
+}
+
+#btn-mostrar-formulario {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+    margin-bottom: 15px;
+}
+
+#btn-mostrar-formulario:hover {
+    background-color: #218838;
+}
+
+#formulario-contenido {
+    background-color: #f8f9fa;
+    padding: 25px;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+#formulario-contenido h3 {
+    color: #243447;
+    font-size: 18px;
+    margin: 0 0 20px 0;
+    font-weight: 600;
+}
+
+#formulario-contenido label {
+    display: block;
+    color: #495057;
+    font-weight: 500;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+#formulario-contenido input[type="text"],
+#formulario-contenido textarea,
+#formulario-contenido select,
+#formulario-contenido input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 14px;
+    font-family: inherit;
+}
+
+#formulario-contenido textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+#formulario-contenido input[type="file"] {
+    padding: 8px;
+}
+
+#formulario-contenido input:focus,
+#formulario-contenido textarea:focus,
+#formulario-contenido select:focus {
+    outline: none;
+    border-color: #243447;
+    box-shadow: 0 0 0 3px rgba(36, 52, 71, 0.1);
+}
+
+.form-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-submit {
+    flex: 1;
+    background-color: #243447;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.btn-submit:hover:not(:disabled) {
+    background-color: #1a2732;
+}
+
+.btn-submit:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+.btn-cancel {
+    flex: 1;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.btn-cancel:hover {
+    background-color: #5a6268;
+}
+
+/* Tablas */
+table {
+    width: calc(100% - 40px);
+    margin: 0 20px 20px 20px;
+    border-collapse: collapse;
+    border: 1px solid #dee2e6;
+}
+
+table thead {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #243447;
+}
+
+table thead th {
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 14px;
+    color: #243447;
+}
+
+table tbody td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #dee2e6;
+    font-size: 14px;
+    color: #495057;
+}
+
+table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Botones de acción en tablas */
+table button {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    margin-right: 5px;
+    transition: opacity 0.2s ease;
+}
+
+table button:hover {
+    opacity: 0.8;
+}
+
+table button.btn-edit {
+    background-color: #ffc107;
+    color: #333;
+}
+
+table button.btn-delete {
+    background-color: #dc3545;
+    color: white;
+}
+
+table button.btn-view {
+    background-color: #17a2b8;
+    color: white;
+}
+
+table button.btn-reportar {
+    background-color: #ffc107;
+    color: #333;
+}
+
+table button.btn-reportar:hover {
+    background-color: #e0a800;
+}
+
+/* ==================== ESTILOS DE FOROS ==================== */
+
+/* Pestañas */
+.tabs-container {
+    display: flex;
+    gap: 10px;
+    margin: 0 20px 20px 20px;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.tab-button {
+    background-color: transparent;
+    border: none;
+    padding: 12px 24px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    color: #6c757d;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.tab-button:hover {
+    color: #243447;
+    background-color: #f8f9fa;
+}
+
+.tab-button.active {
+    color: #243447;
+    border-bottom-color: #243447;
+    font-weight: 600;
+}
+
+/* Contenedor de foros */
+.foro-form-container {
+    margin: 0 20px 30px 20px;
+}
+
+#btn-crear-foro {
+    background-color: #17a2b8;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+    margin-bottom: 15px;
+}
+
+#btn-crear-foro:hover {
+    background-color: #138496;
+}
+
+#formulario-foro {
+    background-color: #f8f9fa;
+    padding: 25px;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+#formulario-foro h3 {
+    color: #243447;
+    font-size: 18px;
+    margin: 0 0 20px 0;
+    font-weight: 600;
+}
+
+#formulario-foro input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+#formulario-foro input:focus {
+    outline: none;
+    border-color: #243447;
+    box-shadow: 0 0 0 3px rgba(36, 52, 71, 0.1);
+}
+
+/* Lista de foros */
+.foros-container {
+    margin: 0 20px;
+}
+
+.foro-card {
+    background: white;
+    border: 2px solid #17a2b8;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.foro-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(23, 162, 184, 0.2);
+}
+
+.foro-card h4 {
+    color: #243447;
+    font-size: 18px;
+    margin: 0 0 10px 0;
+    font-weight: 600;
+}
+
+.foro-info {
+    color: #6c757d;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.foro-card button {
+    background-color: #17a2b8;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.foro-card button:hover {
+    background-color: #138496;
+}
+
+/* Vista de mensajes del foro */
+.foro-header {
+    background-color: #f8f9fa;
+    padding: 15px 20px;
+    margin: 0 20px 20px 20px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.foro-header h3 {
+    color: #243447;
+    font-size: 18px;
+    margin: 0;
+    flex: 1;
+}
+
+.btn-back {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-back:hover {
+    background-color: #5a6268;
+}
+
+/* Mensajes */
+.mensajes-container {
+    margin: 0 20px 20px 20px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.mensaje {
+    background-color: white;
+    border-left: 3px solid #17a2b8;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.mensaje:last-child {
+    margin-bottom: 0;
+}
+
+.mensaje-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.mensaje-header strong {
+    color: #243447;
+    font-size: 14px;
+}
+
+.mensaje-fecha {
+    color: #6c757d;
+    font-size: 12px;
+}
+
+.mensaje-contenido {
+    color: #495057;
+    font-size: 14px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.btn-delete-mensaje {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-delete-mensaje:hover {
+    background-color: #c82333;
+}
+
+/* Formulario de nuevo mensaje */
+.nuevo-mensaje-container {
+    margin: 0 20px 20px 20px;
+}
+
+#formulario-mensaje {
+    display: flex;
+    gap: 10px;
+}
+
+#contenido-mensaje {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 14px;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 60px;
+}
+
+#contenido-mensaje:focus {
+    outline: none;
+    border-color: #17a2b8;
+    box-shadow: 0 0 0 3px rgba(23, 162, 184, 0.1);
+}
+
+#formulario-mensaje .btn-submit {
+    width: auto;
+    padding: 10px 20px;
+    background-color: #17a2b8;
+    align-self: flex-end;
+}
+
+#formulario-mensaje .btn-submit:hover {
+    background-color: #138496;
+}
+
+/* ==================== MODAL DE REPORTES ==================== */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    position: relative;
+    animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #999;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.modal-close:hover {
+    color: #333;
+}
+
+.modal-content h3 {
+    color: #dc3545;
+    font-size: 20px;
+    margin: 0 0 15px 0;
+}
+
+.modal-content p {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+#formulario-reporte label {
+    display: block;
+    color: #495057;
+    font-weight: 500;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+#formulario-reporte select,
+#formulario-reporte textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 14px;
+    font-family: inherit;
+}
+
+#formulario-reporte textarea {
+    resize: vertical;
+}
+
+#formulario-reporte select:focus,
+#formulario-reporte textarea:focus {
+    outline: none;
+    border-color: #dc3545;
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
+.btn-reportar {
+    background-color: #ffc107 !important;
+    color: #333 !important;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    margin-left: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-reportar:hover {
+    background-color: #e0a800 !important;
+}
+
+#formulario-reporte .btn-reportar {
+    background-color: #dc3545 !important;
+    color: white !important;
+}
+
+#formulario-reporte .btn-reportar:hover {
+    background-color: #c82333 !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    nav h1 {
+        font-size: 20px;
+    }
+    
+    .estudiante-panel {
+        padding: 20px 10px;
+    }
+    
+    .cards-container {
+        grid-template-columns: 1fr;
+        padding: 10px;
+    }
+
+    .breadcrumb {
+        margin: 0 10px 15px 10px;
+        padding: 10px 15px;
+    }
+
+    .contenido-form-container {
+        margin: 0 10px 20px 10px;
+    }
+
+    #formulario-contenido {
+        padding: 15px;
+    }
+
+    .form-buttons {
+        flex-direction: column;
+    }
+    
+    .tabs-container {
+        margin: 0 10px 15px 10px;
+    }
+    
+    .tab-button {
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+    
+    .foro-form-container,
+    .foros-container,
+    .foro-header,
+    .mensajes-container,
+    .nuevo-mensaje-container {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    
+    .foro-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    #formulario-mensaje {
+        flex-direction: column;
+    }
+    
+    #formulario-mensaje .btn-submit {
+        width: 100%;
+    }
+    
+    .modal-content {
+        width: 95%;
+        padding: 20px;
+    }
+    
+    .modal-content h3 {
+        font-size: 18px;
+    }
+}

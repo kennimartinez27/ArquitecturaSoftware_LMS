@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administración - LMS</title>
+    <link rel="stylesheet" href="../css/admin-dashboard.css">
 </head>
 <body>
     <nav>
@@ -11,7 +12,31 @@
         <button onclick="logout()">Cerrar Sesión</button>
     </nav>
 
-    <div class="admin-panel">
+    <div class="admin-container">
+        <!-- Menú lateral -->
+        <aside class="sidebar">
+            <div class="sidebar-menu">
+                <button class="menu-item active" onclick="mostrarSeccion('usuarios')">
+                    <span class="menu-icon">👥</span>
+                    <span class="menu-text">Usuarios</span>
+                </button>
+                <button class="menu-item" onclick="mostrarSeccion('materias')">
+                    <span class="menu-icon">📚</span>
+                    <span class="menu-text">Materias</span>
+                </button>
+                <button class="menu-item" onclick="mostrarSeccion('categorias')">
+                    <span class="menu-icon">📑</span>
+                    <span class="menu-text">Categorías</span>
+                </button>
+                <button class="menu-item" onclick="mostrarSeccion('reportes')">
+                    <span class="menu-icon">📋</span>
+                    <span class="menu-text">Reportes</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Contenido principal -->
+        <div class="admin-panel">
         <!-- Gestión de Usuarios -->
         <section id="usuarios-section">
             <h2>Gestión de Usuarios</h2>
@@ -104,9 +129,118 @@
                 </table>
             </div>
         </section>
+
+        <!-- Gestión de Reportes -->
+        <section id="reportes-section">
+            <h2>📋 Gestión de Reportes</h2>
+            
+            <!-- Filtros de reportes -->
+            <div class="reportes-filtros">
+                <button class="filtro-btn active" onclick="filtrarReportes('todos')">
+                    Todos <span id="count-todos" class="badge">0</span>
+                </button>
+                <button class="filtro-btn" onclick="filtrarReportes('Pendiente')">
+                    ⏳ Pendientes <span id="count-pendientes" class="badge badge-warning">0</span>
+                </button>
+                <button class="filtro-btn" onclick="filtrarReportes('En Revisión')">
+                    🔍 En Revisión <span id="count-revision" class="badge badge-info">0</span>
+                </button>
+                <button class="filtro-btn" onclick="filtrarReportes('Resuelto')">
+                    ✅ Resueltos <span id="count-resueltos" class="badge badge-success">0</span>
+                </button>
+                <button class="filtro-btn" onclick="filtrarReportes('Rechazado')">
+                    ❌ Rechazados <span id="count-rechazados" class="badge badge-danger">0</span>
+                </button>
+            </div>
+
+            <!-- Lista de reportes -->
+            <div id="lista-reportes">
+                <h3>Reportes</h3>
+                <div id="reportes-container">
+                    <p class="no-data" id="no-reportes">No hay reportes para mostrar</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Modal para ver detalles del reporte -->
+        <div id="modal-detalle-reporte" class="modal" style="display: none;">
+            <div class="modal-content modal-large">
+                <span class="modal-close" onclick="cerrarModalDetalleReporte()">&times;</span>
+                <h3>📋 Detalles del Reporte</h3>
+                
+                <div class="reporte-detalle">
+                    <div class="detalle-row">
+                        <strong>ID del Reporte:</strong>
+                        <span id="detalle-id"></span>
+                    </div>
+                    <div class="detalle-row">
+                        <strong>Estado Actual:</strong>
+                        <span id="detalle-estado" class="badge"></span>
+                    </div>
+                    <div class="detalle-row">
+                        <strong>Reportado por:</strong>
+                        <span id="detalle-usuario"></span>
+                    </div>
+                    <div class="detalle-row">
+                        <strong>Motivo:</strong>
+                        <span id="detalle-motivo"></span>
+                    </div>
+                    
+                    <hr>
+                    
+                    <h4>📄 Contenido Reportado</h4>
+                    <div class="detalle-row">
+                        <strong>Título:</strong>
+                        <span id="detalle-contenido-titulo"></span>
+                    </div>
+                    <div class="detalle-row">
+                        <strong>Tipo:</strong>
+                        <span id="detalle-contenido-tipo"></span>
+                    </div>
+                    <div class="detalle-row">
+                        <strong>Descripción:</strong>
+                        <span id="detalle-contenido-descripcion"></span>
+                    </div>
+                    <div class="detalle-row">
+                        <strong>Materia:</strong>
+                        <span id="detalle-contenido-materia"></span>
+                    </div>
+                    
+                    <hr>
+                    
+                    <h4>⚙️ Acciones</h4>
+                    <div class="acciones-reporte">
+                        <label for="select-estado">Cambiar Estado:</label>
+                        <select id="select-estado">
+                            <option value="Pendiente">⏳ Pendiente</option>
+                            <option value="En Revisión">🔍 En Revisión</option>
+                            <option value="Resuelto">✅ Resuelto</option>
+                            <option value="Rechazado">❌ Rechazado</option>
+                        </select>
+                        <button class="btn-submit" onclick="cambiarEstadoReporte()">
+                            Actualizar Estado
+                        </button>
+                    </div>
+                    
+                    <div class="acciones-contenido">
+                        <button class="btn-download" onclick="descargarContenidoReportado()">
+                            📥 Descargar Contenido
+                        </button>
+                        <button class="btn-delete-content" onclick="eliminarContenidoReportado()">
+                            🗑️ Eliminar Contenido
+                        </button>
+                        <button class="btn-delete-report" onclick="eliminarReporteActual()">
+                            ❌ Eliminar Reporte
+                        </button>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
     </div>
 
     <script src="../js/api.js"></script>
     <script src="../js/admin.js"></script>
+    <script src="../js/admin-reportes.js"></script>
 </body>
 </html>

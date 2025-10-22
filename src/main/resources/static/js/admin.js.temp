@@ -1,10 +1,9 @@
 // Verificar autenticación
 function verificarAuth() {
-    const userRole = (localStorage.getItem('userRole') || '').toString().trim();
+    const userRole = localStorage.getItem('userRole');
     const userName = localStorage.getItem('userName');
     
-    // Comparación case-insensitive
-    if (!userName || userRole.toLowerCase() !== 'administrador') {
+    if (!userName || userRole !== 'Administrador') {
         window.location.href = '/index.html';
         return;
     }
@@ -18,26 +17,6 @@ function logout() {
     localStorage.removeItem('userName');
     localStorage.removeItem('userRole');
     window.location.href = '/index.html';
-}
-
-// ==================== NAVEGACIÓN DEL MENÚ ====================
-function mostrarSeccion(seccion) {
-    // Ocultar todas las secciones
-    const secciones = document.querySelectorAll('section');
-    secciones.forEach(s => s.classList.remove('active'));
-    
-    // Desactivar todos los botones del menú
-    const menuItems = document.querySelectorAll('.menu-item');
-    menuItems.forEach(item => item.classList.remove('active'));
-    
-    // Mostrar la sección seleccionada
-    const seccionActiva = document.getElementById(`${seccion}-section`);
-    if (seccionActiva) {
-        seccionActiva.classList.add('active');
-    }
-    
-    // Activar el botón del menú correspondiente
-    event.target.closest('.menu-item').classList.add('active');
 }
 
 // Funciones para mostrar/ocultar formularios
@@ -314,10 +293,6 @@ async function editarCategoria(id) {
 // Event Listeners para los formularios
 document.addEventListener('DOMContentLoaded', () => {
     verificarAuth();
-    
-    // Mostrar la sección de usuarios por defecto
-    document.getElementById('usuarios-section').classList.add('active');
-    
     cargarUsuarios();
     cargarMaterias();
     cargarCategorias();

@@ -60,4 +60,16 @@ public class AdminFacade {
     public List<Materia> listarMaterias() {
         return materiaService.listarMaterias();
     }
+
+    public Usuario obtenerUsuario(Long id) {
+        return usuarioService.obtenerUsuario(id);
+    }
+
+    public Usuario actualizarUsuario(Usuario usuario) {
+        return usuarioService.actualizarUsuario(usuario);
+    }
+
+    public void eliminarUsuario(Long id) {
+        usuarioService.eliminarUsuario(id);
+    }
 }

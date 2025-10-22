@@ -20,4 +20,27 @@ public class UsuarioService {
     public List<Usuario> listarUsuarios() {
         return usuarioRepository.findAll();
     }
+
+    public Usuario obtenerUsuario(Long id) {
+        return usuarioRepository.findById(id).orElse(null);
+    }
+
+    public Usuario actualizarUsuario(Usuario usuario) {
+        // Obtener el usuario existente
+        Usuario usuarioExistente = usuarioRepository.findById(usuario.getId())
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        
+        // Actualizar solo los campos necesarios
+        usuarioExistente.setNombre(usuario.getNombre());
+        usuarioExistente.setCorreo(usuario.getCorreo());
+        if (usuario.getContrasena() != null && !usuario.getContrasena().isEmpty()) {
+            usuarioExistente.setContrasena(usuario.getContrasena());
+        }
+        
+        return usuarioRepository.save(usuarioExistente);
+    }
+
+    public void eliminarUsuario(Long id) {
+        usuarioRepository.deleteById(id);
+    }
 }

@@ -46,7 +46,7 @@ public class CategoriaController {
      */
     @Operation(summary = "Obtener categoría", description = "Devuelve una categoría por ID")
     @GetMapping("/{id}")
-    public Categoria obtenerCategoria(@PathVariable Long id) {
+    public Categoria obtenerCategoria(@PathVariable("id") Long id) {
         return categoriaService.obtenerCategoria(id);
     }
 
@@ -66,7 +66,7 @@ public class CategoriaController {
      */
     @Operation(summary = "Eliminar categoría", description = "Elimina una categoría por ID")
     @DeleteMapping("/eliminar/{id}")
-    public void eliminarCategoria(@PathVariable Long id) {
+    public void eliminarCategoria(@PathVariable("id") Long id) {
         categoriaService.eliminarCategoria(id);
     }
 }

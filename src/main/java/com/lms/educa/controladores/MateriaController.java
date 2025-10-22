@@ -46,7 +46,7 @@ public class MateriaController {
      */
     @Operation(summary = "Obtener materia", description = "Devuelve una materia por ID")
     @GetMapping("/{id}")
-    public Materia obtenerMateria(@PathVariable Long id) {
+    public Materia obtenerMateria(@PathVariable("id") Long id) {
         return materiaService.obtenerMateria(id);
     }
 
@@ -66,7 +66,7 @@ public class MateriaController {
      */
     @Operation(summary = "Eliminar materia", description = "Elimina una materia por ID")
     @DeleteMapping("/eliminar/{id}")
-    public void eliminarMateria(@PathVariable Long id) {
+    public void eliminarMateria(@PathVariable("id") Long id) {
         materiaService.eliminarMateria(id);
     }
 }

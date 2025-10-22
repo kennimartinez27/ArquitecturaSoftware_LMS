@@ -3,23 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LMS - Sistema de Gestión de Aprendizaje</title>
+    <title>Iniciar Sesión - LMS</title>
+    <link rel="stylesheet" href="css/login.css">
 </head>
 <body>
-    <div class="login-container">
+    <header>
         <h1>Iniciar Sesión</h1>
-        <form id="loginForm">
-            <div>
+    </header>
+
+    <main class="login-container">
+        <div class="login-card">
+            <form id="loginForm" class="login-form">
                 <label for="username">Usuario:</label>
                 <input type="text" id="username" name="username" required>
-            </div>
-            <div>
+
                 <label for="password">Contraseña:</label>
                 <input type="password" id="password" name="password" required>
-            </div>
-            <button type="submit">Iniciar Sesión</button>
-        </form>
-    </div>
+
+                <div id="errorMsg" class="error-msg">Usuario o contraseña incorrectos.</div>
+
+                <button type="submit">Iniciar Sesión</button>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Recursos Académicos Universitarios</p>
+    </footer>
 
     <script src="js/api.js"></script>
     <script src="js/login.js"></script>

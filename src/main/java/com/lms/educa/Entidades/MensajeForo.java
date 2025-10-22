@@ -1,5 +1,6 @@
 package com.lms.educa.Entidades;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -15,6 +16,7 @@ public class MensajeForo {
 
     @ManyToOne
     @JoinColumn(name = "foro_id", nullable = false)
+    @JsonBackReference
     private Foro foro;
 
     @ManyToOne

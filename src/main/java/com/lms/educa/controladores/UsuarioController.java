@@ -29,6 +29,8 @@ public class UsuarioController {
         public String nombre;
         public String correo;
         public String contrasena;
+        public Long id;
+        public String rol;
     }
 
 
@@ -57,5 +59,46 @@ public class UsuarioController {
     @GetMapping("/listar")
     public List<Usuario> listarUsuarios() {
         return adminFacade.listarUsuarios();
+    }
+
+    /**
+     * Obtiene un usuario por su identificador.
+     */
+    @Operation(summary = "Obtener usuario", description = "Devuelve un usuario por ID")
+    @GetMapping("/{id}")
+    public Usuario obtenerUsuario(@PathVariable("id") Long id) {
+        return adminFacade.obtenerUsuario(id);
+    }
+
+    /**
+     * Actualiza un usuario existente.
+     */
+    @Operation(summary = "Actualizar usuario", description = "Actualiza los datos de un usuario")
+    @PutMapping("/actualizar")
+    public Usuario actualizarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
+        // Obtener usuario existente
+        Usuario existente = adminFacade.obtenerUsuario(usuarioDTO.id);
+        if (existente == null) {
+            throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND, "Usuario no encontrado");
+        }
+
+        // Actualizar campos permitidos
+        existente.setNombre(usuarioDTO.nombre != null ? usuarioDTO.nombre : existente.getNombre());
+        existente.setCorreo(usuarioDTO.correo != null ? usuarioDTO.correo : existente.getCorreo());
+        if (usuarioDTO.contrasena != null && !usuarioDTO.contrasena.isEmpty()) {
+            existente.setContrasena(usuarioDTO.contrasena);
+        }
+
+        // No cambiamos rol aquí por seguridad; si es necesario, puede habilitarse con validaciones
+        return adminFacade.actualizarUsuario(existente);
+    }
+
+    /**
+     * Elimina un usuario por su identificador.
+     */
+    @Operation(summary = "Eliminar usuario", description = "Elimina un usuario por ID")
+    @DeleteMapping("/eliminar/{id}")
+    public void eliminarUsuario(@PathVariable("id") Long id) {
+        adminFacade.eliminarUsuario(id);
     }
 }

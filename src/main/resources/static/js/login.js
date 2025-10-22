@@ -14,7 +14,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.setItem('userId', response.id);
                 localStorage.setItem('userEmail', response.correo);
                 localStorage.setItem('userName', response.nombre);
-                localStorage.setItem('userRole', response.rol);
+                // Normalizar rol: capitalizar la primera letra y el resto en minúsculas
+                const normalizedRole = response.rol ? response.rol.toString().trim() : '';
+                const roleFormatted = normalizedRole ? normalizedRole.charAt(0).toUpperCase() + normalizedRole.slice(1).toLowerCase() : '';
+                localStorage.setItem('userRole', roleFormatted);
 
                 // Redirigir según el tipo de usuario
                 switch(response.rol) {

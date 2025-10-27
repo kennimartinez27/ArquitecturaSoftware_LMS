@@ -23,3 +23,6 @@ Este repositorio contiene el backend del sistema LMS desarrollado en Java con Sp
 
 ```bash
 ./gradlew bootRun
+
+## LINK API:
+ http://localhost:8080/index.html

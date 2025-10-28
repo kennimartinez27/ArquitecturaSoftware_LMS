@@ -1,10 +1,12 @@
 // Variables globales
 let categoriaSeleccionada = null;
 let materiaSeleccionada = null;
+let tieneSuscripcionActiva = false;
 
 // Verificar autenticación al cargar la página
 document.addEventListener('DOMContentLoaded', () => {
     verificarAuth();
+    verificarEstadoSuscripcion();
     cargarCategorias();
 });
 
@@ -24,6 +26,79 @@ function verificarAuth() {
     const userNameElement = document.getElementById('nombreEstudiante');
     if (userNameElement) {
         userNameElement.textContent = userName || 'Estudiante';
+    }
+}
+
+// Verificar estado de suscripción
+async function verificarEstadoSuscripcion() {
+    const userId = localStorage.getItem('userId');
+    if (!userId) return;
+    
+    try {
+        const response = await api.verificarSuscripcion(userId);
+        tieneSuscripcionActiva = response.tieneSuscripcion;
+        
+        const estadoSuscripcion = document.getElementById('estado-suscripcion');
+        const btnSuscribirse = document.getElementById('btn-suscribirse');
+        
+        if (tieneSuscripcionActiva) {
+            estadoSuscripcion.style.display = 'inline-block';
+            btnSuscribirse.style.display = 'none';
+        } else {
+            estadoSuscripcion.style.display = 'none';
+            btnSuscribirse.style.display = 'inline-block';
+        }
+    } catch (error) {
+        console.error('Error verificando suscripción:', error);
+    }
+}
+
+// Mostrar modal de suscripción
+function mostrarModalSuscripcion() {
+    const modal = document.getElementById('modal-suscripcion');
+    modal.style.display = 'flex';
+}
+
+// Cerrar modal de suscripción
+function cerrarModalSuscripcion() {
+    const modal = document.getElementById('modal-suscripcion');
+    modal.style.display = 'none';
+}
+
+// Procesar suscripción con Mercado Pago
+async function procesarSuscripcion() {
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+        alert('Error: No se pudo identificar al usuario');
+        return;
+    }
+    
+    const btnProcesar = document.getElementById('btn-procesar-pago');
+    const loader = document.getElementById('loader-pago');
+    
+    try {
+        btnProcesar.disabled = true;
+        btnProcesar.textContent = 'Procesando...';
+        loader.style.display = 'block';
+        
+        // Crear preferencia de pago
+        const response = await api.crearPreferenciaPago(userId);
+        
+        if (response.suscripcionActiva) {
+            alert('Ya tienes una suscripción activa');
+            cerrarModalSuscripcion();
+            return;
+        }
+        
+        // Redirigir a Mercado Pago (usar sandboxInitPoint para pruebas)
+        window.location.href = response.sandboxInitPoint;
+        
+    } catch (error) {
+        console.error('Error procesando pago:', error);
+        alert('Error al procesar el pago: ' + error.message);
+        btnProcesar.disabled = false;
+        btnProcesar.textContent = 'Proceder al Pago';
+        loader.style.display = 'none';
     }
 }
 
@@ -168,12 +243,33 @@ function mostrarContenidosEnTabla(contenidos) {
 // Descargar contenido
 async function descargarContenido(contenidoId, nombreArchivo) {
     try {
+        // Primero obtener información del contenido
+        const contenido = await api.getContenido(contenidoId);
+        
+        // Si es un examen, verificar suscripción
+        if (contenido.tipo === 'Examen') {
+            if (!tieneSuscripcionActiva) {
+                if (confirm('Para descargar exámenes necesitas una suscripción activa. ¿Deseas suscribirte ahora?')) {
+                    mostrarModalSuscripcion();
+                }
+                return;
+            }
+        }
+        
+        // Si tiene suscripción o no es un examen, proceder con la descarga
+        const userId = localStorage.getItem('userId');
         console.log(`Descargando contenido ${contenidoId}: ${nombreArchivo}`);
-        await api.descargarContenido(contenidoId);
+        window.open(`http://localhost:8080/api/contenidos/descargar/${contenidoId}?estudianteId=${userId}`, '_blank');
         console.log('Descarga iniciada correctamente');
     } catch (error) {
         console.error('Error al descargar contenido:', error);
-        alert('Error al descargar el archivo');
+        if (error.message.includes('suscripción')) {
+            if (confirm('Para descargar exámenes necesitas una suscripción activa. ¿Deseas suscribirte ahora?')) {
+                mostrarModalSuscripcion();
+            }
+        } else {
+            alert('Error al descargar el archivo');
+        }
     }
 }
 

@@ -322,6 +322,8 @@ document.addEventListener('DOMContentLoaded', () => {
     cargarMaterias();
     cargarCategorias();
     cargarReportes(); // Cargar reportes al inicio
+    cargarSuscripciones(); // Cargar suscripciones al inicio
+    cargarEstadisticasSuscripciones(); // Cargar estadísticas
 
     // Formulario de Usuario
     document.getElementById('userForm').addEventListener('submit', async (e) => {
@@ -386,3 +388,113 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+// ==================== FUNCIONES DE SUSCRIPCIONES ====================
+
+let todasLasSuscripciones = [];
+
+// Cargar estadísticas de suscripciones
+async function cargarEstadisticasSuscripciones() {
+    try {
+        const stats = await api.getEstadisticasSuscripciones();
+        const suscripciones = await api.getSuscripciones();
+        
+        document.getElementById('stat-activas').textContent = stats.suscripcionesActivas || 0;
+        document.getElementById('stat-totales').textContent = suscripciones.length || 0;
+        document.getElementById('stat-precio').textContent = `$${stats.precioSuscripcion || 0}`;
+    } catch (error) {
+        console.error('Error cargando estadísticas:', error);
+    }
+}
+
+// Cargar todas las suscripciones
+async function cargarSuscripciones() {
+    try {
+        const suscripciones = await api.getSuscripciones();
+        todasLasSuscripciones = suscripciones;
+        mostrarSuscripciones(suscripciones);
+    } catch (error) {
+        console.error('Error cargando suscripciones:', error);
+        alert('Error al cargar suscripciones');
+    }
+}
+
+// Mostrar suscripciones en la tabla
+function mostrarSuscripciones(suscripciones) {
+    const tabla = document.getElementById('suscripciones-tabla');
+    tabla.innerHTML = '';
+    
+    if (suscripciones.length === 0) {
+        tabla.innerHTML = '<tr><td colspan="8" class="no-data">No hay suscripciones para mostrar</td></tr>';
+        return;
+    }
+    
+    suscripciones.forEach(sus => {
+        const fecha = new Date(sus.fechaPago).toLocaleString('es-ES', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        
+        const estadoPagoBadge = getBadgeEstadoPago(sus.estadoPago);
+        const estadoSuscripcionBadge = getBadgeEstadoSuscripcion(sus.estadoSuscripcion);
+        
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${sus.id}</td>
+            <td>${sus.estudiante.nombre}</td>
+            <td>${sus.estudiante.correo}</td>
+            <td>${fecha}</td>
+            <td>$${sus.montoPagado}</td>
+            <td>${estadoPagoBadge}</td>
+            <td>${estadoSuscripcionBadge}</td>
+            <td>${sus.metodoPago || 'N/A'}</td>
+        `;
+        
+        tabla.appendChild(row);
+    });
+}
+
+// Obtener badge para estado de pago
+function getBadgeEstadoPago(estado) {
+    const badges = {
+        'approved': '<span class="badge badge-success">✅ Aprobado</span>',
+        'pending': '<span class="badge badge-warning">⏳ Pendiente</span>',
+        'rejected': '<span class="badge badge-danger">❌ Rechazado</span>',
+        'cancelled': '<span class="badge badge-secondary">🚫 Cancelado</span>'
+    };
+    return badges[estado] || `<span class="badge">${estado}</span>`;
+}
+
+// Obtener badge para estado de suscripción
+function getBadgeEstadoSuscripcion(estado) {
+    if (estado === 'activa') {
+        return '<span class="badge badge-success">✅ Activa</span>';
+    } else {
+        return '<span class="badge badge-secondary">❌ Inactiva</span>';
+    }
+}
+
+// Filtrar suscripciones
+function filtrarSuscripciones(filtro) {
+    // Actualizar botones activos
+    const botones = document.querySelectorAll('.suscripciones-filtros .filtro-btn');
+    botones.forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+    
+    let suscripcionesFiltradas = todasLasSuscripciones;
+    
+    if (filtro === 'activa') {
+        suscripcionesFiltradas = todasLasSuscripciones.filter(s => s.estadoSuscripcion === 'activa');
+    } else if (filtro === 'inactiva') {
+        suscripcionesFiltradas = todasLasSuscripciones.filter(s => s.estadoSuscripcion === 'inactiva');
+    } else if (filtro === 'pending') {
+        suscripcionesFiltradas = todasLasSuscripciones.filter(s => s.estadoPago === 'pending');
+    } else if (filtro === 'approved') {
+        suscripcionesFiltradas = todasLasSuscripciones.filter(s => s.estadoPago === 'approved');
+    }
+    
+    mostrarSuscripciones(suscripcionesFiltradas);
+}

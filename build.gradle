@@ -38,6 +38,11 @@ dependencies {
 
 	// Dependencia para documentación Swagger/OpenAPI
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
+
+	implementation('com.mercadopago:sdk-java:2.1.7') {
+    exclude group: 'org.sonatype.sisu', module: 'sisu-guice'
+}
+
 }
 
 tasks.named('test') {

@@ -4,10 +4,12 @@ import com.lms.educa.Entidades.Contenido;
 import com.lms.educa.Entidades.Materia;
 import com.lms.educa.servicios.ContenidoService;
 import com.lms.educa.servicios.MateriaService;
+import com.lms.educa.servicios.SuscripcionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +20,9 @@ import io.swagger.v3.oas.annotations.Operation;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Controlador para la gestión de contenidos.
@@ -34,6 +38,9 @@ public class ContenidoController {
     
     @Autowired
     private MateriaService materiaService;
+    
+    @Autowired
+    private SuscripcionService suscripcionService;
     
     /**
      * Crea un nuevo contenido con archivo opcional.
@@ -94,14 +101,37 @@ public class ContenidoController {
     
     /**
      * Descarga un archivo de contenido.
+     * Para archivos de tipo "Examen" requiere suscripción activa.
      */
     @Operation(summary = "Descargar archivo", description = "Descarga el archivo de un contenido")
     @GetMapping("/descargar/{id}")
-    public ResponseEntity<Resource> descargarArchivo(@PathVariable("id") Long id) {
+    public ResponseEntity<?> descargarArchivo(
+            @PathVariable("id") Long id,
+            @RequestParam(value = "estudianteId", required = false) Long estudianteId) {
         try {
             Contenido contenido = contenidoService.obtenerContenido(id);
             if (contenido == null || contenido.getArchivo() == null) {
-                return ResponseEntity.notFound().build();
+                Map<String, String> error = new HashMap<>();
+                error.put("error", "Contenido no encontrado");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+            }
+            
+            // Validar suscripción si es un examen
+            if ("Examen".equalsIgnoreCase(contenido.getTipo())) {
+                if (estudianteId == null) {
+                    Map<String, String> error = new HashMap<>();
+                    error.put("error", "Se requiere ID de estudiante para descargar exámenes");
+                    error.put("requiereSuscripcion", "true");
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+                }
+                
+                boolean tieneSuscripcion = suscripcionService.tienesSuscripcionActiva(estudianteId);
+                if (!tieneSuscripcion) {
+                    Map<String, String> error = new HashMap<>();
+                    error.put("error", "Necesitas una suscripción activa para descargar exámenes");
+                    error.put("requiereSuscripcion", "true");
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+                }
             }
             
             Path rutaArchivo = contenidoService.obtenerRutaArchivo(contenido.getArchivo());
@@ -113,10 +143,14 @@ public class ContenidoController {
                         "attachment; filename=\"" + contenido.getTitulo() + "\"")
                     .body(recurso);
             } else {
-                return ResponseEntity.notFound().build();
+                Map<String, String> error = new HashMap<>();
+                error.put("error", "Archivo no disponible");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
             }
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Error al descargar archivo: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
         }
     }
     

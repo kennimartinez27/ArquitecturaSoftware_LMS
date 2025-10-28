@@ -9,7 +9,13 @@
 <body>
     <nav>
         <h1>Panel de Estudiante</h1>
-        <div>
+        <div class="nav-actions">
+            <div id="estado-suscripcion" class="suscripcion-badge" style="display:none;">
+                <span id="texto-suscripcion">✓ Suscripción Activa</span>
+            </div>
+            <button id="btn-suscribirse" onclick="mostrarModalSuscripcion()" style="display:none;" class="btn-suscribirse">
+                💳 Suscribirse para Exámenes
+            </button>
             <span id="nombreEstudiante"></span>
             <button onclick="logout()">Cerrar Sesión</button>
         </div>
@@ -192,6 +198,37 @@
         </div>
     </div>
 
+    <!-- Modal para Suscripción -->
+    <div id="modal-suscripcion" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="modal-close" onclick="cerrarModalSuscripcion()">&times;</span>
+            <h3>💳 Suscripción para Descargar Exámenes</h3>
+            <div class="suscripcion-info">
+                <p>Obtén acceso único para descargar todos los archivos de tipo <strong>Examen</strong>.</p>
+                <ul>
+                    <li>✓ Pago único, sin renovaciones</li>
+                    <li>✓ Acceso inmediato tras la aprobación del pago</li>
+                    <li>✓ Descarga ilimitada de exámenes</li>
+                    <li>✓ Pago seguro con Mercado Pago</li>
+                </ul>
+                <div class="precio-suscripcion">
+                    <span class="precio">$200 ARS</span>
+                    <span class="precio-texto">Pago único</span>
+                </div>
+            </div>
+            <div class="form-buttons">
+                <button id="btn-procesar-pago" onclick="procesarSuscripcion()" class="btn-submit">
+                    Proceder al Pago
+                </button>
+                <button type="button" class="btn-cancel" onclick="cerrarModalSuscripcion()">Cancelar</button>
+            </div>
+            <div id="loader-pago" style="display: none; text-align: center; margin-top: 20px;">
+                <p>Redirigiendo a Mercado Pago...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
     <script src="../js/api.js"></script>
     <script src="../js/estudiante.js"></script>
 </body>

@@ -32,6 +32,10 @@
                     <span class="menu-icon">📋</span>
                     <span class="menu-text">Reportes</span>
                 </button>
+                <button class="menu-item" onclick="mostrarSeccion('suscripciones')">
+                    <span class="menu-icon">💳</span>
+                    <span class="menu-text">Suscripciones</span>
+                </button>
             </div>
         </aside>
 
@@ -159,6 +163,79 @@
                 <div id="reportes-container">
                     <p class="no-data" id="no-reportes">No hay reportes para mostrar</p>
                 </div>
+            </div>
+        </section>
+
+        <!-- Gestión de Suscripciones -->
+        <section id="suscripciones-section">
+            <h2>💳 Gestión de Suscripciones</h2>
+            
+            <!-- Estadísticas -->
+            <div class="suscripciones-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Suscripciones Activas</span>
+                        <span class="stat-value" id="stat-activas">0</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Total Suscripciones</span>
+                        <span class="stat-value" id="stat-totales">0</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Precio</span>
+                        <span class="stat-value" id="stat-precio">$0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Filtros de suscripciones -->
+            <div class="suscripciones-filtros">
+                <button class="filtro-btn active" onclick="filtrarSuscripciones('todas')">
+                    Todas
+                </button>
+                <button class="filtro-btn" onclick="filtrarSuscripciones('activa')">
+                    ✅ Activas
+                </button>
+                <button class="filtro-btn" onclick="filtrarSuscripciones('inactiva')">
+                    ❌ Inactivas
+                </button>
+                <button class="filtro-btn" onclick="filtrarSuscripciones('pending')">
+                    ⏳ Pendientes
+                </button>
+                <button class="filtro-btn" onclick="filtrarSuscripciones('approved')">
+                    💚 Aprobadas
+                </button>
+            </div>
+
+            <!-- Lista de suscripciones -->
+            <div id="lista-suscripciones">
+                <h3>Listado de Suscripciones</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Estudiante</th>
+                            <th>Correo</th>
+                            <th>Fecha de Pago</th>
+                            <th>Monto</th>
+                            <th>Estado Pago</th>
+                            <th>Estado Suscripción</th>
+                            <th>Método de Pago</th>
+                        </tr>
+                    </thead>
+                    <tbody id="suscripciones-tabla">
+                        <tr>
+                            <td colspan="8" class="no-data">No hay suscripciones registradas</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </section>
 

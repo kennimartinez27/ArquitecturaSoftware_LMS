@@ -1,0 +1,147 @@
+{
+  "info": {
+    "name": "Sistema de Suscripciones - Mercado Pago",
+    "description": "Collection para probar el sistema de suscripciones con Mercado Pago Colombia",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Crear Preferencia de Pago",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/pagos/crear-preferencia/4",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "pagos", "crear-preferencia", "4"]
+        },
+        "description": "Crea una preferencia de pago para el estudiante con ID 4"
+      },
+      "response": []
+    },
+    {
+      "name": "2. Verificar Suscripción",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/pagos/verificar-suscripcion/4",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "pagos", "verificar-suscripcion", "4"]
+        },
+        "description": "Verifica si el estudiante tiene suscripción activa"
+      },
+      "response": []
+    },
+    {
+      "name": "3. Listar Suscripciones",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/pagos/suscripciones",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "pagos", "suscripciones"]
+        },
+        "description": "Lista todas las suscripciones (admin)"
+      },
+      "response": []
+    },
+    {
+      "name": "4. Webhook Mercado Pago (Simulación)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"action\": \"payment.created\",\n  \"api_version\": \"v1\",\n  \"data\": {\n    \"id\": \"123456789\"\n  },\n  \"date_created\": \"2025-10-28T10:00:00.000-05:00\",\n  \"id\": 12345,\n  \"live_mode\": false,\n  \"type\": \"payment\",\n  \"user_id\": \"1279385050\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/pagos/webhook?topic=payment&id=123456789",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "pagos", "webhook"],
+          "query": [
+            {
+              "key": "topic",
+              "value": "payment"
+            },
+            {
+              "key": "id",
+              "value": "123456789"
+            }
+          ]
+        },
+        "description": "Simula un webhook de Mercado Pago (notificación de pago)"
+      },
+      "response": []
+    },
+    {
+      "name": "5. Verificar Pago en Mercado Pago",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer TEST-8265058950722613-102800-e736790d60309174695ade555e04d623-1279385050"
+          }
+        ],
+        "url": {
+          "raw": "https://api.mercadopago.com/v1/payments/:payment_id",
+          "protocol": "https",
+          "host": ["api", "mercadopago", "com"],
+          "path": ["v1", "payments", ":payment_id"],
+          "variable": [
+            {
+              "key": "payment_id",
+              "value": "123456789",
+              "description": "ID del pago a consultar"
+            }
+          ]
+        },
+        "description": "Consulta información de un pago en Mercado Pago"
+      },
+      "response": []
+    },
+    {
+      "name": "6. Crear Pago de Prueba (Mercado Pago API)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer TEST-8265058950722613-102800-e736790d60309174695ade555e04d623-1279385050"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"transaction_amount\": 1000,\n  \"description\": \"Suscripción para Descargar Exámenes\",\n  \"payment_method_id\": \"master\",\n  \"payer\": {\n    \"email\": \"test@test.com\",\n    \"first_name\": \"Test\",\n    \"last_name\": \"User\",\n    \"identification\": {\n      \"type\": \"CC\",\n      \"number\": \"12345678\"\n    }\n  },\n  \"token\": \"CARD_TOKEN_ID\",\n  \"installments\": 1,\n  \"external_reference\": \"estudiante-4\"\n}"
+        },
+        "url": {
+          "raw": "https://api.mercadopago.com/v1/payments",
+          "protocol": "https",
+          "host": ["api", "mercadopago", "com"],
+          "path": ["v1", "payments"]
+        },
+        "description": "Crea un pago directamente en la API de Mercado Pago (requiere token de tarjeta)"
+      },
+      "response": []
+    }
+  ]
+}

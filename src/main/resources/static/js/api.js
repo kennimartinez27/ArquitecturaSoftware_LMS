@@ -714,7 +714,7 @@ const api = {
         }
     },
     
-    // Eliminar reporte
+        // Eliminar reporte
     deleteReporte: async (id) => {
         try {
             const response = await fetch(`${BASE_URL}/api/reportes/${id}`, {
@@ -728,6 +728,93 @@ const api = {
             console.log('Reporte eliminado exitosamente');
         } catch (error) {
             console.error('Error eliminando reporte:', error);
+            throw error;
+        }
+    },
+
+    // ==================== SUSCRIPCIONES Y PAGOS ====================
+    
+    // Crear preferencia de pago para suscripción
+    crearPreferenciaPago: async (estudianteId) => {
+        try {
+            console.log('Creando preferencia de pago para estudiante:', estudianteId);
+            const response = await fetch(`${BASE_URL}/api/pagos/crear-preferencia/${estudianteId}`, {
+                method: 'POST'
+            });
+            
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Error al crear preferencia de pago');
+            }
+            
+            return await response.json();
+        } catch (error) {
+            console.error('Error creando preferencia de pago:', error);
+            throw error;
+        }
+    },
+    
+    // Verificar si el estudiante tiene suscripción activa
+    verificarSuscripcion: async (estudianteId) => {
+        try {
+            console.log('Verificando suscripción para estudiante:', estudianteId);
+            const response = await fetch(`${BASE_URL}/api/pagos/verificar-suscripcion/${estudianteId}`);
+            
+            if (!response.ok) {
+                throw new Error(`Error al verificar suscripción: ${response.status}`);
+            }
+            
+            return await response.json();
+        } catch (error) {
+            console.error('Error verificando suscripción:', error);
+            throw error;
+        }
+    },
+    
+    // Obtener todas las suscripciones (admin)
+    getSuscripciones: async () => {
+        try {
+            const response = await fetch(`${BASE_URL}/api/pagos/suscripciones`);
+            
+            if (!response.ok) {
+                throw new Error(`Error al obtener suscripciones: ${response.status}`);
+            }
+            
+            return await response.json();
+        } catch (error) {
+            console.error('Error obteniendo suscripciones:', error);
+            throw error;
+        }
+    },
+    
+    // Obtener suscripciones de un estudiante
+    getSuscripcionesPorEstudiante: async (estudianteId) => {
+        try {
+            const response = await fetch(`${BASE_URL}/api/pagos/suscripciones/estudiante/${estudianteId}`);
+            
+            if (!response.ok) {
+                throw new Error(`Error al obtener suscripciones: ${response.status}`);
+            }
+            
+            return await response.json();
+        } catch (error) {
+            console.error('Error obteniendo suscripciones del estudiante:', error);
+            throw error;
+        }
+    },
+    
+    // Obtener estadísticas de suscripciones
+    getEstadisticasSuscripciones: async () => {
+        try {
+            const response = await fetch(`${BASE_URL}/api/pagos/estadisticas`);
+            
+            if (!response.ok) {
+                throw new Error(`Error al obtener estadísticas: ${response.status}`);
+            }
+            
+            return await response.json();
+        } catch (error) {
+            console.error('Error obteniendo estadísticas:', error);
             throw error;
         }
     }
